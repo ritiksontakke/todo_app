@@ -1,26 +1,25 @@
 from fastapi import FastAPI
+from pydantic import BaseModel, Field
+from typing import Annotated
+
+
+class CreateNewAccount(BaseModel):
+    user_name : str
+    full_name : Annotated[str, Field(min_length=3 ,max_length=50)]
+    mail_id : Annotated[str, Field(pattern= r".+@.+\..+")]
+    password : str
+
 
 app = FastAPI()
 
-@app.get("/")
-def root():
-    return {"Hello": "World"}
 
-def create_user(user_name,full_name,mail_id,password):
-    # print("user_name : " , user_name)
-    # print("full_name : ", full_name)
-    # print("mail_id : ", mail_id)
+@app.post("/create_account/")
+def create_user(creat:CreateNewAccount ):
+    return creat
 
-    return {
-        "user_name" : user_name,
-        "full_name" : full_name,
-        "mail_id" : mail_id,
-        "password" : password
-    }
 
 # value = create_user("ritik","ritik","ritik1008@gmail.com","ruitik")
 # print("value : ", value)
-
 
 
 
