@@ -54,10 +54,10 @@ def new_task(new_task : UpdateTaskReq):
     }
 
 @app.delete("/delete_task")
-def delete_task(delet :DeleteTaskReq):
+def delete_task(delete :DeleteTaskReq):
     return {
         "id":"dffff",
-        "task_name" : delet.task_name
+        "task_name" : delete.task_name
     }
 
 
