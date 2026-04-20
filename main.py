@@ -62,37 +62,3 @@ def delete_task(delete :DeleteTaskReq):
 
 # value = create_user("ritik","ritik","ritik1008@gmail.com","ruitik")
 # print("value : ", value)
-
-
-from typing import Optional
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-
-from db import Base
-
-class User(Base):
-    __tablename__ = "user"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(30))
-    fullname: Mapped[Optional[str]]
-    password: Mapped[str] = mapped_column(String(30))
-    def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
-
-import enum #python enum
-class StatusEnum(enum.Enum):
-    OPEN = "open"
-    COMPLETE = "complete"
-    PROGRESS = "progress"
-
-from sqlalchemy import Enum #sqlalchemy enum
-class Task(Base):
-    __tablename__ = "task"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(30))
-    status: Mapped[StatusEnum] = mapped_column(
-        Enum(StatusEnum),
-        default=StatusEnum.OPEN
-    )
-
