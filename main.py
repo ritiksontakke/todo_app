@@ -1,6 +1,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Annotated
+from sqlalchemy.orm import Session
+from db import get_db, engine, Base
+import service
+from fastapi import Depends
+import user
+import task
 
 class CreateNewAccount(BaseModel):
     user_name : str
@@ -24,6 +30,11 @@ class DeleteTaskReq(BaseModel):
     task_name : str
 
 app = FastAPI()
+
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
+    print("Non exisiting table were crated sucessfully")
 
 @app.post("/create_account")
 def create_user(create:CreateNewAccount):
@@ -54,7 +65,7 @@ def new_task(new_task : UpdateTaskReq):
     }
 
 @app.delete("/delete_task")
-def delete_task(delete :DeleteTaskReq):
+def delete_task(delete: DeleteTaskReq, db: Session = Depends(get_db)):
     return {
         "id":"dffff",
         "task_name" : delete.task_name
