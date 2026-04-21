@@ -12,10 +12,10 @@ if TYPE_CHECKING:
 class User(Base):
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(primary_key=True)
-    email_name: Mapped[str] = mapped_column(String(30))
-    fullname: Mapped[Optional[str]]
+    email: Mapped[str] = mapped_column(String(30))
+    full_name: Mapped[Optional[str]]
     password: Mapped[str] = mapped_column(String(30))
-    task : Mapped[List["Task"]] = relationship(back_populates="user")
+    # task : Mapped[List["Task"]] = relationship(back_populates="user")
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
     

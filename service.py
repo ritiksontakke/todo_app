@@ -10,11 +10,11 @@ from task import Task, StatusEnum
 # USER SERVICES
 # ------------------------
 
-def create_user(db: Session, email_name: str, password: str, fullname: Optional[str] = None) -> User:
+def create_user(db: Session, email: str, password: str, full_name: Optional[str] = None) -> User:
     user = User(
-        email_name=email_name,
+        email=email,
         password=password,
-        fullname=fullname
+        full_name=full_name
     )
     db.add(user)
     db.commit()

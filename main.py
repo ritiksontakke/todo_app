@@ -9,9 +9,8 @@ import user
 import task
 
 class CreateNewAccount(BaseModel):
-    user_name : str
     full_name : Annotated[str, Field(min_length=3 ,max_length=50)]
-    mail_id : Annotated[str, Field(pattern= r".+@.+\..+")]
+    email : Annotated[str, Field(pattern= r".+@.+\..+")]
     password : str
 
 class Login(BaseModel):
@@ -37,8 +36,8 @@ def on_startup():
     print("Non exisiting table were crated sucessfully")
 
 @app.post("/create_account")
-def create_user(create:CreateNewAccount):
-    return create
+def create_user(create:CreateNewAccount, db: Session = Depends(get_db)):
+    return service.create_user(db, create.email, create.password, create.full_name)
 
 @app.post("/login")
 def login_user(login : Login):
@@ -49,8 +48,7 @@ def logout_user(mail_id : str):
     return login_user.remove(mail_id)
 
 @app.post("/create_task")
-def new_task(new_task : CreateTaskReq):
-    # db -> save -> id , taskname
+def new_task(new_task : CreateTaskReq, db: Session = Depends(get_db)):    
     return {
         "task_id": "34567",
         "task_name": new_task.task_name
