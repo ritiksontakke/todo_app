@@ -6,14 +6,13 @@ from sqlalchemy.orm import mapped_column
 
 from db import Base
 
-
 if TYPE_CHECKING:
     from .task import Task
 
 class User(Base):
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(30))
+    email_name: Mapped[str] = mapped_column(String(30))
     fullname: Mapped[Optional[str]]
     password: Mapped[str] = mapped_column(String(30))
     task : Mapped[List["Task"]] = relationship(back_populates="user")
