@@ -45,13 +45,13 @@ def delete_user(db: Session, user_id: int) -> bool:
 
 def create_task(
     db: Session,
-    name: str,
+    task_name: str,
     due_date: datetime,
     user_id: int,
     status: StatusEnum = StatusEnum.OPEN
 ) -> Task:
     task = Task(
-        name=name,
+        name=task_name,
         due_date=due_date,
         user_id=user_id,
         status=status

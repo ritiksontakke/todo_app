@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from typing import Annotated
 from sqlalchemy.orm import Session
 from db import get_db, engine, Base
+from datetime import datetime
 import service
 from fastapi import Depends
 import user
@@ -14,11 +15,15 @@ class CreateNewAccount(BaseModel):
     password : str
 
 class Login(BaseModel):
-    mail_id : Annotated[str, Field(pattern=r".+@.+\..+")]
+    email  : Annotated[str, Field(pattern=r".+@.+\..+")]
     password : str
 
 class CreateTaskReq(BaseModel):
     task_name: str
+    due_date: datetime
+    user_id : int
+    status : str
+    
 
 class UpdateTaskReq(BaseModel):
     id: str
@@ -40,19 +45,16 @@ def create_user(create:CreateNewAccount, db: Session = Depends(get_db)):
     return service.create_user(db, create.email, create.password, create.full_name)
 
 @app.post("/login")
-def login_user(login : Login):
-    return login
+def login_user(login : Login, db: Session = Depends(get_db)):
+    return service.get_user_by_id(db, login.email, login.password)
 
 @app.post("/logout")
 def logout_user(mail_id : str):
     return login_user.remove(mail_id)
 
 @app.post("/create_task")
-def new_task(new_task : CreateTaskReq, db: Session = Depends(get_db)):    
-    return {
-        "task_id": "34567",
-        "task_name": new_task.task_name
-    }
+def create_task(new_task : CreateTaskReq, db: Session = Depends(get_db)):    
+    return service.create_task(db, new_task.task_name, new_task.due_date, new_task.user_id, new_task.status)
 
 @app.put("/update_task")
 def new_task(new_task : UpdateTaskReq):
