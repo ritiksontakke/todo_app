@@ -15,7 +15,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(30))
     full_name: Mapped[Optional[str]]
     password: Mapped[str] = mapped_column(String(30))
-    # tasks: Mapped[List["Task"]] = relationship(back_populates="user") 
+    Task: Mapped[List["Task"]] = relationship(back_populates="user")
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
-    

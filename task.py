@@ -20,7 +20,6 @@ class Task(Base):
     __tablename__ = "Task"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))   
     status: Mapped[StatusEnum] = mapped_column(
         Enum(StatusEnum , name="StatusEnum"),
         default=StatusEnum.OPEN
@@ -40,7 +39,5 @@ class Task(Base):
         onupdate=datetime.utcnow
     )
     
-    # user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    # user: Mapped["User"] = relationship(back_populates="tasks")
-
-
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user: Mapped["User"] = relationship(back_populates="Task")

@@ -4,7 +4,7 @@ from typing import Annotated
 from sqlalchemy.orm import Session
 from db import get_db, engine, Base
 from datetime import datetime
-import service
+from services import user_service , task_service
 from fastapi import Depends
 import user
 import task
@@ -42,27 +42,27 @@ def on_startup():
 
 @app.post("/create_account")
 def create_user(create:CreateNewAccount, db: Session = Depends(get_db)):
-    return service.create_user(db, create.email, create.password, create.full_name)
+    return user_service.create_user(db, create.email, create.password, create.full_name)
 
 @app.post("/login")
 def login_user(login : Login, db: Session = Depends(get_db)):
-    return service.get_user_by_id(db, login.email, login.password)
+    return user_service.get_user_by_id(db, login.email, login.password)
 
 @app.post("/logout")
 def logout_user(mail_id : str):
-    return login_user.remove(mail_id)
+    return "logout"
 
 @app.post("/create_task")
 def create_task(new_task : CreateTaskReq, db: Session = Depends(get_db)):    
-    return service.create_task(db, new_task.task_name, new_task.due_date, new_task.user_id, new_task.status)
+    return task_service.create_task(db, new_task.task_name, new_task.due_date, new_task.user_id, new_task.status)
 
-@app.put("/update_task")
-def new_task(new_task : UpdateTaskReq):
-    # db -> id , taskname - update -> updated + id
-    return {
-        "id":"dfdfd", 
-        "task_name":new_task.task_name + " learning"
-    }
+@app.put("/update_task_abc")
+def update_task(update_task : UpdateTaskReq, db: Session = Depends(get_db)):
+    print("------step : 1")
+    res = task_service.update_task(db=db, task_id=update_task.id, name=update_task.task_name)
+    print("------step : 5")
+    return res
+
 
 @app.delete("/delete_task")
 def delete_task(delete: DeleteTaskReq, db: Session = Depends(get_db)):
